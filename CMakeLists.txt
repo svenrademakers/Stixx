@@ -36,7 +36,8 @@ if(STIXX_GLFW)
 	source_group("assimp" FILES ${glfw_headers} ${glfw_sources})
 	list(APPEND sources ${glfw_headers} ${glfw_sources})
 endif()
-	
+
+SET(GLM_TEST_ENABLE_CXX_17 ON CACHE BOOL "build glm for cxx17")
 add_subdirectory(glm)
 
 add_library(Stixx ${sources})
