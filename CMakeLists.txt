@@ -24,7 +24,6 @@ if(STIXX_GLFW)
 	list(APPEND headers ${CMAKE_CURRENT_SOURCE_DIR}/glfw/WindowGlfw.hpp)
 	list(APPEND sources ${CMAKE_CURRENT_SOURCE_DIR}/glfw/InputGlfw.cpp)
 	list(APPEND sources ${CMAKE_CURRENT_SOURCE_DIR}/glfw/WindowGlfw.cpp)
-	target_link_libraries(Stixx glfw)
 endif()
 
 add_library(Stixx
@@ -53,7 +52,12 @@ target_include_directories(Stixx
 	PRIVATE
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>)
 			
-target_link_libraries(Stixx  glm)
+target_link_libraries(Stixx glm)
+
+if (STIXX_GLFW)
+	target_include_directories(Stixx PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/glfw>)
+	target_link_libraries(Stixx glfw)
+endif()
 
 install(DIRECTORY include interfaces DESTINATION include)
 
