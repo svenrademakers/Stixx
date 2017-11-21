@@ -3,27 +3,6 @@
 
 namespace sx
 {
-	class StridedIterator;
-
-	template<class T, uint32_t Stride_>
-	class StridedIterator2D
-		: public StridedIterator<T, Stride_>
-	{
-	public:
-		StridedIterator2D(const StridedIterator<T, Stride_> iterator, const uint32_t width)
-			: StridedIterator<T, Stride>(iterator)
-			, width(width)
-		{}
-
-		void verticalIncrement()
-		{
-			ptr += (Stride_ * width);
-		}
-
-	private:
-		const uint32_t width;
-	};
-
 	template<class T, uint32_t Stride_>
 	class StridedIterator
 	{
@@ -78,6 +57,25 @@ namespace sx
 
 	protected:
 		pointer ptr;
+	};
+
+	template<class T, uint32_t Stride_>
+	class StridedIterator2D
+		: public StridedIterator<T, Stride_>
+	{
+	public:
+		StridedIterator2D(const StridedIterator<T, Stride_> iterator, const uint32_t width)
+			: StridedIterator<T, Stride>(iterator)
+			, width(width)
+		{}
+
+		void verticalIncrement()
+		{
+			ptr += (Stride_ * width);
+		}
+
+	private:
+		const uint32_t width;
 	};
 }
 #endif
