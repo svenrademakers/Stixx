@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <istream>
 #include <vector>
-#include "MemoryRange.hpp"
+#include "infra/MemoryRange.hpp"
 
 namespace sx
 {

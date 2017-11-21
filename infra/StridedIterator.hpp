@@ -1,6 +1,8 @@
 #ifndef STRIDED_ITERATOR_HPP
 #define STRIDED_ITERATOR_HPP
 
+#include <stdint.h>
+
 namespace sx
 {
 	template<class T, uint32_t Stride_>
