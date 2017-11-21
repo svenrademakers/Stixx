@@ -10,26 +10,34 @@ option(STIXX_GLFW "Build glfw implementation for window interfaces" OFF)
 option(STIXX_ASSIMP "Build Assimp implementation for AssetLoader interfaces" OFF)
 option(STIXX_MICROTESTS "Build micro tests" ON)
 
-file(GLOB_RECURSE sources src/*.cpp)
-file(GLOB_RECURSE headers include/*.hpp)
+file(GLOB_RECURSE utils_sources utils/*.cpp utils/*.hpp)
+file(GLOB_RECURSE infra_sources infra/*.cpp infra/*.hpp)
+file(GLOB_RECURSE platform_sources platform/*.cpp platform/*.hpp)
+file(GLOB_RECURSE interfaces_sources interfaces/*.cpp interfaces/*.hpp)
+file(GLOB_RECURSE interactors_sources interactors/*.cpp interactors/*.hpp)
+source_group("utils" FILES ${utils_sources})
+source_group("infra" FILES ${infra_sources})
+source_group("platform" FILES ${platform_sources})
+source_group("interfaces" FILES ${interfaces_sources})
+source_group("interactors" FILES ${interactors_sources})
+set(sources ${utils_sources} ${infra_sources} ${platform_sources} ${interfaces_sources} ${interactors_sources})
 
 if(STIXX_ASSIMP)
-	list(APPEND sources ${CMAKE_CURRENT_SOURCE_DIR}/assimp/src/AssetImporterAssimp.cpp)
-	list(APPEND headers ${CMAKE_CURRENT_SOURCE_DIR}/assimp/include/AssetImporterAssimp.hpp)
+	set(assimp_sources ${CMAKE_CURRENT_SOURCE_DIR}/assimp/src/AssetImporterAssimp.cpp)
+	set(assimp_headers ${CMAKE_CURRENT_SOURCE_DIR}/assimp/include/AssetImporterAssimp.hpp)
+	source_group("assimp" FILES ${assimp_headers} ${assimp_sources})
+	list(APPEND sources ${assimp_headers} ${assimp_sources})
 endif()
 
 if(STIXX_GLFW)
 	add_subdirectory(glfw/glfw)
-	list(APPEND headers ${CMAKE_CURRENT_SOURCE_DIR}/glfw/InputGlfw.hpp)
-	list(APPEND headers ${CMAKE_CURRENT_SOURCE_DIR}/glfw/WindowGlfw.hpp)
-	list(APPEND sources ${CMAKE_CURRENT_SOURCE_DIR}/glfw/InputGlfw.cpp)
-	list(APPEND sources ${CMAKE_CURRENT_SOURCE_DIR}/glfw/WindowGlfw.cpp)
+	set(glfw_headers ${CMAKE_CURRENT_SOURCE_DIR}/glfw/InputGlfw.hpp ${CMAKE_CURRENT_SOURCE_DIR}/glfw/WindowGlfw.hpp)
+	set(glfw_sources ${CMAKE_CURRENT_SOURCE_DIR}/glfw/InputGlfw.cpp ${CMAKE_CURRENT_SOURCE_DIR}/glfw/WindowGlfw.cpp)
+	source_group("assimp" FILES ${glfw_headers} ${glfw_sources})
+	list(APPEND sources ${glfw_headers} ${glfw_sources})
 endif()
 
-add_library(Stixx
-	${sources}
-	${headers}
-)
+add_library(Stixx ${sources})
 
 set_target_properties(Stixx PROPERTIES
 	OUTPUT_NAME Stixx
@@ -46,11 +54,8 @@ endif(MSVC)
 
 target_include_directories(Stixx
 	PUBLIC
-		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/interfaces>
-		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
- 		$<INSTALL_INTERFACE:stixx>
-	PRIVATE
-		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>)
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+ 		$<INSTALL_INTERFACE:stixx>)
 			
 target_link_libraries(Stixx glm)
 

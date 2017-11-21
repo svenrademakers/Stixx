@@ -1,7 +1,7 @@
 #ifndef INPUT_HPP
 #define INPUT_HPP
 
-#include "utils/Observer.hpp"
+#include "infra/Observer.hpp"
 
 namespace sx
 {

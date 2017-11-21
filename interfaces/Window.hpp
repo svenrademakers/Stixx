@@ -2,7 +2,7 @@
 #define WINDOW_HPP
 
 #include <vector>
-#include "utils/Observer.hpp"
+#include "infra/Observer.hpp"
 
 namespace sx
 {

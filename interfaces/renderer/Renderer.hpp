@@ -2,7 +2,7 @@
 #define RENDERER_HPP
 
 #include <chrono>
-#include "utils/Observer.hpp"
+#include "infra/Observer.hpp"
 
 namespace sx
 {
