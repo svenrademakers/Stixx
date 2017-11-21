@@ -4,8 +4,9 @@ set(STIXX_MAJOR_VERSION 0)
 set(STIXX_MINOR_VERSION 1)
 set(STIXX_PATCH_VERSION 0)
 set(STIXX_VERSION ${STIXX_MAJOR_VERSION}.${STIXX_MINOR_VERSION}.${STIXX_PATCH_VERSION})
-message(STATUS "Stixx version ${STIXX_VERSION}")
+message(STATUS "Stixx version: ${STIXX_VERSION}")
 
+option(STIXX_GLFW "Build glfw implementation for window interfaces" OFF)
 option(STIXX_ASSIMP "Build Assimp implementation for AssetLoader interfaces" OFF)
 option(STIXX_MICROTESTS "Build micro tests" ON)
 
@@ -15,6 +16,15 @@ file(GLOB_RECURSE headers include/*.hpp)
 if(STIXX_ASSIMP)
 	list(APPEND sources ${CMAKE_CURRENT_SOURCE_DIR}/assimp/src/AssetImporterAssimp.cpp)
 	list(APPEND headers ${CMAKE_CURRENT_SOURCE_DIR}/assimp/include/AssetImporterAssimp.hpp)
+endif()
+
+if(STIXX_GLFW)
+	add_subdirectory(glfw/glfw)
+	list(APPEND headers ${CMAKE_CURRENT_SOURCE_DIR}/glfw/InputGlfw.hpp)
+	list(APPEND headers ${CMAKE_CURRENT_SOURCE_DIR}/glfw/WindowGlfw.hpp)
+	list(APPEND sources ${CMAKE_CURRENT_SOURCE_DIR}/glfw/InputGlfw.cpp)
+	list(APPEND sources ${CMAKE_CURRENT_SOURCE_DIR}/glfw/WindowGlfw.cpp)
+	target_link_libraries(Stixx glfw)
 endif()
 
 add_library(Stixx
@@ -42,9 +52,8 @@ target_include_directories(Stixx
  		$<INSTALL_INTERFACE:stixx>
 	PRIVATE
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>)
-		
-	
-target_link_libraries(Stixx glfw glm)
+			
+target_link_libraries(Stixx  glm)
 
 install(DIRECTORY include interfaces DESTINATION include)
 
@@ -63,4 +72,3 @@ endif()
 if(STIXX_MICROTESTS)
 	add_subdirectory(test)
 endif()
-
