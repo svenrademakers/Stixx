@@ -36,6 +36,8 @@ if(STIXX_GLFW)
 	source_group("assimp" FILES ${glfw_headers} ${glfw_sources})
 	list(APPEND sources ${glfw_headers} ${glfw_sources})
 endif()
+	
+add_subdirectory(glm)
 
 add_library(Stixx ${sources})
 
