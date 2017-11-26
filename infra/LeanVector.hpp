@@ -19,13 +19,13 @@ namespace sx
 		StorageType storage;
 	};
 
-	template<class Base, class StorageType>
+	template<class Base, std::size_t MaxSize_>
 	class StackStorage
-		: public StorageHolder<StorageType>
+		: public StorageHolder<std::array<typename Base::value_type, MaxSize_>>
 		, public Base
 	{
 	public:
-		StackStorage()
+		constexpr StackStorage()
 			: Base(storage.data(), storage.data() + storage.size())
 		{}
 	};
@@ -34,16 +34,19 @@ namespace sx
 	class LeanVector
 	{
 	public:
+		using value_type = T;
+
 		template <std::size_t MaxSize>
-		using WithStorage = StackStorage<LeanVector<T>, std::array<uint8_t, MaxSize>>;
+		using WithStorage = StackStorage<LeanVector<T>, MaxSize>;
 
 		LeanVector()
 			: range(0,0)
+			, current(nullptr)
 		{}
 
-		LeanVector(typename const MemoryRange<T>::iterator begin, 
-			typename const MemoryRange<T>::iterator end)
+		LeanVector(T* begin, T* end)
 			: range(begin, end)
+			, current(nullptr)
 		{}
 
 		constexpr std::size_t size()

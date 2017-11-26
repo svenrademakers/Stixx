@@ -33,7 +33,7 @@ if(STIXX_GLFW)
 	add_subdirectory(glfw/glfw)
 	set(glfw_headers ${CMAKE_CURRENT_SOURCE_DIR}/glfw/InputGlfw.hpp ${CMAKE_CURRENT_SOURCE_DIR}/glfw/WindowGlfw.hpp)
 	set(glfw_sources ${CMAKE_CURRENT_SOURCE_DIR}/glfw/InputGlfw.cpp ${CMAKE_CURRENT_SOURCE_DIR}/glfw/WindowGlfw.cpp)
-	source_group("assimp" FILES ${glfw_headers} ${glfw_sources})
+	source_group("glfw" FILES ${glfw_headers} ${glfw_sources})
 	list(APPEND sources ${glfw_headers} ${glfw_sources})
 endif()
 
