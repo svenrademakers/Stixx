@@ -9,7 +9,7 @@
 namespace sx
 {
 	class WindowHandle
-		: public CastOperator<GLFWwindow*>
+		: public ObjectWrapper<GLFWwindow*>
 	{
 	public:
 		WindowHandle& operator=(GLFWwindow* w)

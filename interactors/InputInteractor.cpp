@@ -1,6 +1,5 @@
 #include "interactors/InputInteractor.hpp"
 #include "interfaces/Window.hpp"
-#include "interfaces/Camera.hpp"
 #include <iostream>
 
 namespace sx

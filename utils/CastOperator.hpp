@@ -1,22 +1,28 @@
-#ifndef CAST_OPERATOR_HPP
-#define CAST_OPERATOR_HPP
+#ifndef OBJECT_WRAPPER_HPP
+#define OBJECT_WRAPPER_HPP
 
 namespace sx
 {
     template<typename T>
-    class CastOperator
+    class ObjectWrapper
     {
     public:
 		using value_type = T;
 
-		constexpr CastOperator() = default;
+		constexpr ObjectWrapper() = default;
+		explicit ObjectWrapper(const T&&);
         operator const T &() const;
     protected:
         T handle;
     };
 
+	template<typename T>
+	ObjectWrapper<T>::ObjectWrapper(const T&& object)
+		: handle(std::move(object))
+	{}
+
     template<typename T>
-    CastOperator<T>::operator const T &() const
+    ObjectWrapper<T>::operator const T &() const
     {
         return handle;
     }
