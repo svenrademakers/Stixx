@@ -46,16 +46,47 @@ namespace sx
 
 		LeanVector(T* begin, T* end)
 			: range(begin, end)
-			, current(nullptr)
+			, current(begin)
 		{}
+
+		LeanVector& operator=(const LeanVector& other)
+		{
+			this->current = other.current;
+			this->range = other.range;
+		}
+
+		T& operator[](uint32_t index)
+		{
+			assert(index >= size());
+			return *(range.begin() + index);
+		}
 
 		constexpr std::size_t size()
 		{
+			return current - range.begin();
+		}
+
+		constexpr std::size_t max_size()
+		{
 			return range.size();
 		}
- 
+
+		constexpr void pop_back()
+		{
+			assert(current > range.begin());
+			--current;
+		}
+
+		constexpr void push_back(const T& value)
+		{
+			assert(current < range.end());
+			*current = value;
+			++current;
+		}
+		 
 	private:
 		MemoryRange<T> range;
+		T* current;
 	};
 }
 
