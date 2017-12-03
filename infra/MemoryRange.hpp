@@ -18,6 +18,11 @@ public:
 		, endElement(vector.data() + vector.size())
 	{}
 
+	constexpr MemoryRange(iterator begin, iterator end)
+		: beginElement(begin)
+		, endElement(end)
+	{}
+
 	constexpr iterator begin()
 	{
 		return beginElement;
