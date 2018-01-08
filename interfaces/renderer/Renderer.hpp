@@ -29,16 +29,9 @@ namespace sx
 	{
 		TransferSrc = 0x1,
 		TransferDst = 0x2,
+		Uniform = 0x10,
 		Indices = 0x40,
 		VertexData = 0x80
-	};
-
-	class  GPUMemoryLoader
-	{
-	public:
-		virtual ~GPUMemoryLoader() {};
-		virtual uint32_t Alignment() const = 0;
-		virtual Buffer LoadDataToMemory(const BufferType type, const std::size_t size, std::function<void(void*)>&& WriteAvailable) const = 0;
 	};
 
 	class ViewProjectionMatrix

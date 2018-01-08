@@ -39,12 +39,12 @@ namespace sx
 		template <std::size_t MaxSize>
 		using WithStorage = StackStorage<LeanVector<T>, MaxSize>;
 
-		LeanVector()
+		constexpr LeanVector()
 			: range(0,0)
 			, current(nullptr)
 		{}
 
-		LeanVector(T* begin, T* end)
+		constexpr LeanVector(T* begin, T* end)
 			: range(begin, end)
 			, current(begin)
 		{}

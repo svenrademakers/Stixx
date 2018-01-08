@@ -5,17 +5,11 @@
 
 namespace sx
 {
-	struct UniformBufferObject {
-		glm::mat4 model;
-		glm::mat4 view;
-		glm::mat4 proj;
-	};
-
 	class Model
 	{
 	public:
 		virtual ~Model() {};
-		virtual void UpdateUbo(UniformBufferObject& ubo) = 0;
+		virtual void UpdateModelMatrix(const glm::mat4& matrix) = 0;
 	};
 }
 #endif
