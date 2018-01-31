@@ -57,7 +57,7 @@ namespace sx
 
 		T& operator[](uint32_t index)
 		{
-			assert(index >= size());
+			assert(index < size());
 			return *(range.begin() + index);
 		}
 
