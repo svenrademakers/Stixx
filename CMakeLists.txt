@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.8.2)
 
+include(cmake_helpers/EnableCXX17.cmake)
+
 set(STIXX_MAJOR_VERSION 0)
 set(STIXX_MINOR_VERSION 1)
 set(STIXX_PATCH_VERSION 0)
@@ -41,6 +43,7 @@ SET(GLM_TEST_ENABLE_CXX_17 ON CACHE BOOL "build glm for cxx17")
 add_subdirectory(glm)
 
 add_library(Stixx ${sources})
+EnableCXX17(Stixx)
 
 set_target_properties(Stixx PROPERTIES
 	OUTPUT_NAME Stixx
@@ -49,11 +52,6 @@ set_target_properties(Stixx PROPERTIES
 	SOVERSION ${STIXX_MAJOR_VERSION}
 	FOLDER stixx
 )
-
-set_property(TARGET Stixx PROPERTY CXX_STANDARD 17)
-if(MSVC)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
-endif(MSVC)
 
 target_include_directories(Stixx
 	PUBLIC
