@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8.2)
-
+project(stixx)
 include(cmake_helpers/EnableCXX17.cmake)
 
 set(STIXX_MAJOR_VERSION 0)
