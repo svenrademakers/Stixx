@@ -25,9 +25,9 @@ namespace sx
             , endElement(end)
         {}
 
-        iterator operator[](const std::size_t index) const
+        constexpr iterator operator[](const std::size_t index) const
         {
-            return iterator(beginElement + index);
+            return const_cast<T*>(beginElement + index);
         }
 
         constexpr iterator begin() const
@@ -35,7 +35,17 @@ namespace sx
             return beginElement;
         }
 
+        constexpr const_iterator cbegin() const
+        {
+            return beginElement;
+        }
+
         constexpr iterator end() const
+        {
+            return endElement;
+        }
+
+        constexpr const_iterator cend() const
         {
             return endElement;
         }
