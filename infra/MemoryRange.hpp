@@ -5,72 +5,118 @@
 #include <vector>
 #include <iterator>
 
-template<class T>
-class MemoryRange
+namespace sx
 {
-public:
-	typedef typename T* iterator;
+    template<class T>
+    class ConstMemoryRange
+    {
+    public:
+        typedef typename T* iterator;
+        typedef typename const T* const_iterator;
 
-	MemoryRange() = default;
+        template<typename T2, std::size_t N>
+        constexpr ConstMemoryRange(const std::array<T2, N>& arr)
+            : beginElement(arr.data())
+            , endElement(arr.data() + arr.size())
+        {}
 
-	explicit MemoryRange(std::vector<T>& vector)
-		: beginElement(vector.data())
-		, endElement(vector.data() + vector.size())
-	{}
+        constexpr ConstMemoryRange(iterator begin, iterator end)
+            : beginElement(begin)
+            , endElement(end)
+        {}
 
-	constexpr MemoryRange(iterator begin, iterator end)
-		: beginElement(begin)
-		, endElement(end)
-	{}
+        iterator operator[](const std::size_t index) const
+        {
+            return iterator(beginElement + index);
+        }
 
-	constexpr iterator begin()
-	{
-		return beginElement;
-	}
+        constexpr iterator begin() const
+        {
+            return beginElement;
+        }
 
-	constexpr iterator end() const
-	{
-		return endElement;
-	}
+        constexpr iterator end() const
+        {
+            return endElement;
+        }
 
-	constexpr std::size_t size()
-	{
-		return std::distance(beginElement, endElement);
-	}
+        constexpr std::size_t size() const
+        {
+            return std::distance(beginElement, endElement);
+        }
 
-	void shrink(std::size_t newSize)
-	{
-		if (newSize < size())
-			endElement = beginElement + newSize;
-	}
+    protected:
+        const const_iterator beginElement;
+        const const_iterator endElement;
+    };
 
-protected:
-	iterator beginElement;
-	iterator endElement;
-};
+    template<class T>
+    class MemoryRange
+    {
+    public:
+        typedef typename T* iterator;
 
-template<class T>
-class MemoryRange2D
-	: public MemoryRange<T>
-{
-public:
-	explicit MemoryRange2D(MemoryRange<T> memRange, const uint32_t width)
-		: MemoryRange<T>(memRange)
-		, rowSize(width)
-	{}
+        MemoryRange() = default;
 
-	template<class T2>
-	explicit MemoryRange2D(std::vector<T2>& vector, const uint32_t width)
-		: MemoryRange<T>(vector)
-		, rowSize(width)
-	{}
+        explicit MemoryRange(std::vector<T>& vector)
+            : beginElement(vector.data())
+            , endElement(vector.data() + vector.size())
+        {}
 
-	constexpr uint32_t width()
-	{
-		return rowSize;
-	}
+        constexpr MemoryRange(iterator begin, iterator end)
+            : beginElement(begin)
+            , endElement(end)
+        {}
 
-private:
-	const uint32_t rowSize;
-};
+        constexpr iterator begin()
+        {
+            return beginElement;
+        }
+
+        constexpr iterator end()
+        {
+            return endElement;
+        }
+
+        constexpr std::size_t size()
+        {
+            return std::distance(beginElement, endElement);
+        }
+
+        void shrink(std::size_t newSize)
+        {
+            if (newSize < size())
+                endElement = beginElement + newSize;
+        }
+
+    protected:
+        iterator beginElement;
+        iterator endElement;
+    };
+
+    template<class T>
+    class MemoryRange2D
+        : public MemoryRange<T>
+    {
+    public:
+        explicit MemoryRange2D(MemoryRange<T> memRange, const uint32_t width)
+            : MemoryRange<T>(memRange)
+            , rowSize(width)
+        {}
+
+        template<class T2>
+        explicit MemoryRange2D(std::vector<T2>& vector, const uint32_t width)
+            : MemoryRange<T>(vector)
+            , rowSize(width)
+        {}
+
+        constexpr uint32_t width()
+        {
+            return rowSize;
+        }
+
+    private:
+        const uint32_t rowSize;
+    };
+}
 #endif
