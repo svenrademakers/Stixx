@@ -1,5 +1,6 @@
 set(CURR_DIR ${CMAKE_CURRENT_LIST_DIR})  
 #include(${CURR_DIR}/GTest.cmake)
+include(Stixx/cmake_helpers/EnableCXX17.cmake)
 
 macro(AddMicroTest target)
     set (extra_macro_args ${ARGN})
@@ -15,6 +16,8 @@ macro(AddMicroTest target)
 	add_subdirectory(${CURR_DIR}/../test/googletest)
 
 	add_executable(${target}_MicroTests ${CURR_DIR}/test.cpp ${extra_macro_args})
+	EnableCXX17(${target}_MicroTests)
+	
 	target_include_directories(${target}_MicroTests
 		PRIVATE
 			$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)

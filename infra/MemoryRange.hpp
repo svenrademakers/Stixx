@@ -8,26 +8,26 @@
 namespace sx
 {
     template<class T>
-    class ConstMemoryRange
+    class FixedMemoryRange
     {
     public:
         typedef typename T* iterator;
         typedef typename const T* const_iterator;
 
         template<typename T2, std::size_t N>
-        constexpr ConstMemoryRange(const std::array<T2, N>& arr)
+        constexpr FixedMemoryRange(const std::array<T2, N>& arr)
             : beginElement(arr.data())
             , endElement(arr.data() + arr.size())
         {}
 
-        constexpr ConstMemoryRange(iterator begin, iterator end)
+        constexpr FixedMemoryRange(iterator begin, iterator end)
             : beginElement(begin)
             , endElement(end)
         {}
 
-        constexpr iterator operator[](const std::size_t index) const
+        constexpr T& operator[](const std::size_t index) const
         {
-            return const_cast<T*>(beginElement + index);
+            return *const_cast<T*>(beginElement + index);
         }
 
         constexpr iterator begin() const
