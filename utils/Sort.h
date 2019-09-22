@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdlib>
 
 template <class T, std::size_t N, class Predicate>
 inline void BubbleSort(T(&collection)[N], const Predicate& predicate )
