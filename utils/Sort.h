@@ -2,7 +2,7 @@
 #include <cstdlib>
 
 template <class T, std::size_t N, class Predicate>
-inline void BubbleSort(T(&collection)[N], const Predicate& predicate )
+inline void BubbleSort(std::array<T, N>& collection, const Predicate& predicate)
 {
 	T temp;
 	bool sorted = false;
@@ -27,7 +27,7 @@ inline void BubbleSort(T(&collection)[N], const Predicate& predicate )
 }
 
 template <class T, std::size_t N>
-void BubbleSort(T(&collection)[N])
+void BubbleSort(std::array<T, N>& collection)
 {
 	BubbleSort(collection, [](const T& first, const T& second) { return first > second; });
 }
