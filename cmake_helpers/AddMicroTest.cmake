@@ -1,6 +1,6 @@
 set(CURR_DIR ${CMAKE_CURRENT_LIST_DIR})  
 #include(${CURR_DIR}/GTest.cmake)
-include(Stixx/cmake_helpers/EnableCXX17.cmake)
+include(${CURR_DIR}/EnableCXX17.cmake)
 
 macro(AddMicroTest target)
     set (extra_macro_args ${ARGN})

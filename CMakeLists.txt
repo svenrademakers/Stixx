@@ -10,7 +10,7 @@ message(STATUS "Stixx version: ${STIXX_VERSION}")
 
 option(STIXX_GLFW "Build glfw implementation for window interfaces" OFF)
 option(STIXX_ASSIMP "Build Assimp implementation for AssetLoader interfaces" OFF)
-option(STIXX_MICROTESTS "Build micro tests" OFF)
+option(STIXX_MICROTESTS "Build micro tests" ON)
 
 file(GLOB_RECURSE utils_sources utils/*.cpp utils/*.hpp)
 file(GLOB_RECURSE infra_sources infra/*.cpp infra/*.hpp)
@@ -80,5 +80,5 @@ if(STIXX_ASSIMP)
 endif()
 
 if(STIXX_MICROTESTS)
-	#add_subdirectory(test)
+	add_subdirectory(test)
 endif()

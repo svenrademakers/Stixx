@@ -20,7 +20,7 @@ namespace sx
 		PolyVariant& operator=(const PolyVariant&) = delete;
 		PolyVariant()
 		{
-			new (std::addressof(storage)) Front<T...>::value_type();
+			new (std::addressof(storage)) typename Front<T...>::value_type();
 		}
 
 		template<typename T, typename...Args>
