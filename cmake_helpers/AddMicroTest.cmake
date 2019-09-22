@@ -17,6 +17,7 @@ macro(AddMicroTest target)
 
 	add_executable(${target}_MicroTests ${CURR_DIR}/test.cpp ${extra_macro_args})
 	EnableCXX17(${target}_MicroTests)
+	set_target_properties(${target}_MicroTests PROPERTIES FOLDER ${target})
 	
 	target_include_directories(${target}_MicroTests
 		PRIVATE
@@ -38,7 +39,8 @@ macro(AddBenchmark target)
 
 	add_executable(${target}_Benchmark ${extra_macro_args})
 	EnableCXX17(${target}_Benchmark)
-	
+	set_target_properties(${target}_Benchmark PROPERTIES FOLDER ${target})
+
 	target_include_directories(${target}_Benchmark
 		PRIVATE
 			$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)

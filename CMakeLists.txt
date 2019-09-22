@@ -12,6 +12,7 @@ option(STIXX_GLFW "Build glfw implementation for window interfaces" OFF)
 option(STIXX_ASSIMP "Build Assimp implementation for AssetLoader interfaces" OFF)
 option(STIXX_MICROTESTS "Build micro tests" ON)
 
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 file(GLOB_RECURSE utils_sources utils/*.cpp utils/*.hpp)
 file(GLOB_RECURSE infra_sources infra/*.cpp infra/*.hpp)
 file(GLOB_RECURSE platform_sources platform/*.cpp platform/*.hpp)
@@ -50,7 +51,7 @@ set_target_properties(Stixx PROPERTIES
 	DEBUG_POSTFIX -d
 	VERSION ${STIXX_VERSION}
 	SOVERSION ${STIXX_MAJOR_VERSION}
-	FOLDER stixx
+	FOLDER Stixx
 )
 
 target_include_directories(Stixx
