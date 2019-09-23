@@ -1,0 +1,1 @@
+build_vs\test\Release\Stixx_Benchmark.exe --benchmark_out=build_vs\test\benchmark_res.csv --benchmark_out_format=csv

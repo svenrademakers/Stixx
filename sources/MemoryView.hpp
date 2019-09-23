@@ -14,9 +14,8 @@ namespace sx
 		typedef typename const T* const_iterator;
 
 		template<typename T2, std::size_t N>
-		constexpr MemoryView(const std::array<T2, N>& arr)
+		constexpr MemoryView(std::array<T2, N>& arr)
 			: beginElement(arr.data())
-			, endElement(arr.data() + arr.size())
 			, count(arr.size())
 		{}
 
@@ -32,7 +31,7 @@ namespace sx
 
 		constexpr MemoryView(T* start, std::size_t length)
 			: beginElement(start)
-			, size(length)
+			, count(length)
 		{}
 
 		constexpr T& operator[](const std::size_t index) const
