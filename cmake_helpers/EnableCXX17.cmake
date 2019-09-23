@@ -1,6 +1,0 @@
-function(EnableCxx17 target)
-	set_property(TARGET ${target} PROPERTY CXX_STANDARD 17)
-	if(MSVC)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
-	endif(MSVC)
-endfunction()

@@ -3,7 +3,7 @@
 
 #include <array>
 #include "gtest/gtest.h"
-#include "infra/LeanVector.hpp"
+#include "LeanVector.hpp"
 
 namespace sx
 {

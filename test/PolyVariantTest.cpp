@@ -3,7 +3,7 @@
 
 #include <array>
 #include "gtest/gtest.h"
-#include "infra/PolyVariant.hpp"
+#include "PolyVariant.hpp"
 #include "stdio.h"
 
 namespace sx

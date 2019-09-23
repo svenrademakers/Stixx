@@ -1,4 +1,4 @@
-#include "infra/SpinLock.hpp"
+#include "SpinLock.hpp"
 
 namespace sx
 {

@@ -1,7 +1,5 @@
-#ifndef LEAN_VECTOR_HPP
-#define LEAN_VECTOR_HPP
-
-#include "MemoryRange.hpp"
+#pragma once
+#include "MemoryView.hpp"
 
 namespace sx
 {
@@ -40,7 +38,7 @@ namespace sx
 		using WithStorage = StackStorage<LeanVector<T>, MaxSize>;
 
 		constexpr LeanVector()
-			: range(0,0)
+			: range(nullptr, nullptr)
 			, current(nullptr)
 		{}
 
@@ -48,6 +46,11 @@ namespace sx
 			: range(begin, end)
 			, current(begin)
 		{}
+
+		operator const T &() const
+		{
+			return range;
+		}
 
 		LeanVector& operator=(const LeanVector& other)
 		{
@@ -85,9 +88,8 @@ namespace sx
 		}
 		 
 	private:
-		MemoryRange<T> range;
+		MemoryView<T> range;
 		T* current;
 	};
 }
 
-#endif 

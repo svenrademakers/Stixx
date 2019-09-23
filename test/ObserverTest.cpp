@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "infra/Observer.hpp"
+#include "Observer.hpp"
 
 class TestObserver
 	: public sx::Observer<TestObserver>

@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
-#include "infra/StridedIterator.hpp"
-#include "infra/MemoryRange.hpp"
+#include "StridedIterator.hpp"
 
 namespace sx
 {
@@ -22,10 +21,6 @@ namespace sx
 		EXPECT_EQ(8, *(it + 1));
 		EXPECT_EQ(8, *(++it));
 		EXPECT_EQ(4, *(it += 1));
-
-		MemoryRange2D<uint8_t> buffer(storage, 2);
-		auto iter2 = buffer.begin() + buffer.width();
-		EXPECT_EQ(8, *(iter2));
 	}
 
 	TEST(StridedIteratorTest, compare_iterator)
