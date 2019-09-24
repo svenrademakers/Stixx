@@ -6,6 +6,9 @@
 
 namespace sx
 {
+	template<class T, std::size_t N>
+	class Storage;
+
 	template<class T>
 	class MemoryView
 	{
@@ -14,9 +17,9 @@ namespace sx
 		typedef typename const T* const_iterator;
 
 		template<typename T2, std::size_t N>
-		constexpr MemoryView(std::array<T2, N>& arr)
-			: beginElement(arr.data())
-			, count(arr.size())
+		constexpr MemoryView(Storage<T2,N>* storage)
+			: beginElement(reinterpret_cast< T*>(storage->data()))
+			, count(N)
 		{}
 
 		MemoryView(std::vector<T>& vector)
