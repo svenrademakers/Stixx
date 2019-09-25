@@ -1,5 +1,5 @@
 #pragma once
-#include <initializer_list>
+#include <cassert>
 #include "MemoryView.hpp"
 
 namespace sx
@@ -35,13 +35,14 @@ namespace sx
 		Buffer(Buffer&) = delete;
 		Buffer& operator=(Buffer&) = delete;
 
-		constexpr Buffer(std::initializer_list<T> init)
+		template<class T2, std::size_t N2>
+		constexpr Buffer(const T2 (&init)[N2])
 		{
-			assert(init.size() <= N);
+			static_assert(N2 <= N, "assignment does not fit buffer!");
 
 			iterator storageit = this->begin();
-			for (std::initializer_list<T>::iterator it = init.begin(); it != init.end(); ++it)
-				*storageit++ = *it;
+			for (int i= 0; i < N2; ++i)
+				*storageit++ = init[i];
 		}
 	};
 }
