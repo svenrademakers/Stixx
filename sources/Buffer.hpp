@@ -5,12 +5,12 @@
 namespace sx
 {
 	template<class T, std::size_t N>
-	class StackStorage
+	class Storage
 	{
 	public:
-		constexpr StackStorage() = default;
-		StackStorage(StackStorage&) = delete;
-		StackStorage& operator=(StackStorage&) = delete;
+		constexpr Storage() = default;
+		Storage(Storage&) = delete;
+		Storage& operator=(Storage&) = delete;
 
 		T * data()
 		{
@@ -22,23 +22,16 @@ namespace sx
 	};
 
 	template<class T, std::size_t N>
-	class Storage
-		: public StackStorage<T,N>
+	class Buffer 
+		: public Storage<T, N>
 		, public MemoryView<T>
 	{
 	public:
-		constexpr Storage()
-			: StackStorage<T,N>()
-			, MemoryView<T>(this)
-		{}
-	};
-
-	template<class T, std::size_t N>
-	class Buffer 
-		: public Storage<T, N>
-	{
-	public:
-		Buffer() = default;
+		constexpr Buffer()
+		  : Storage<T,N>()
+		  , MemoryView<T>(this)
+		  {}
+		  
 		Buffer(Buffer&) = delete;
 		Buffer& operator=(Buffer&) = delete;
 
@@ -46,7 +39,7 @@ namespace sx
 		{
 			assert(init.size() <= N);
 
-			MemoryView<T>::iterator storageit = this->begin();
+			iterator storageit = this->begin();
 			for (std::initializer_list<T>::iterator it = init.begin(); it != init.end(); ++it)
 				*storageit++ = *it;
 		}
