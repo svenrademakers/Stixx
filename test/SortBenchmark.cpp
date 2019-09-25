@@ -20,6 +20,6 @@ static void BM_BubbleSort(benchmark::State& state)
 		BubbleSort(range);
 }
 
-BENCHMARK(BM_BubbleSort)->DenseRange(6400, 30464, 128);
-//BENCHMARK(BM_BubbleSort)->RangeMultiplier(2)->Range(0, 1<<16);
+//BENCHMARK(BM_BubbleSort)->DenseRange(6400, 30464, 128);
+BENCHMARK(BM_BubbleSort)->RangeMultiplier(2)->Range(0, 1<<16);
 
