@@ -1,30 +1,79 @@
 #pragma once
-#include <vector>
-#include <cassert>
-#include <array>
 #include <iterator>
 
 namespace sx
 {
-	template<class T, std::size_t N>
-	class Storage;
-
-	template<class T>
+	template<typename T, typename AlignedType>
 	class MemoryView
 	{
 	public:
-		typedef typename T* iterator;
-		typedef typename const T* const_iterator;
+		class AlignedIterator
+		{
+		public:
+			using value_type = T;
+			using pointer = T * ;
+			using reference = T & ;
+			using difference_type = std::ptrdiff_t;
+			using iterator_category = std::random_access_iterator_tag;
 
-		template<typename T2, std::size_t N>
-		constexpr MemoryView(Storage<T2,N>* storage)
-			: beginElement(reinterpret_cast< T*>(storage->data()))
-			, count(N)
-		{}
+			AlignedIterator(AlignedType* data)
+				: ptr(data)
+			{}
 
-		MemoryView(std::vector<T>& vector)
-			: beginElement(vector.data())
-			, count(vector.size())
+			reference operator*()
+			{
+				return *reinterpret_cast<T*>(ptr);
+			}
+
+			const reference operator*() const
+			{
+				return *reinterpret_cast<T*>(ptr);
+			}
+
+			reference operator[](std::size_t size) const
+			{
+				return *reinterpret_cast<T*>(ptr + size);
+			}
+
+			pointer operator->()
+			{
+				return reinterpret_cast<T*>(ptr);
+			}
+
+			const pointer operator->() const
+			{
+				return reinterpret_cast<T*>(ptr);
+			}
+
+			AlignedIterator& operator++()
+			{
+				++ptr;
+				return *this;
+			}
+
+			AlignedIterator operator++(int)
+			{
+				AlignedIterator r(*this);
+				++ptr;
+				return r;
+			}
+
+			AlignedIterator operator+(std::size_t n)
+			{
+				AlignedIterator r(*this);
+				return ptr += n;
+			}
+
+		private:
+			AlignedType * ptr = nullptr;
+		};
+
+		typedef typename AlignedIterator iterator;
+		typedef typename const AlignedIterator const_iterator;
+
+		constexpr MemoryView(iterator start, std::size_t length)
+			: beginElement(start)
+			, count(length)
 		{}
 
 		constexpr MemoryView(const iterator begin, const iterator end)
@@ -32,14 +81,9 @@ namespace sx
 			, count(std::distance(begin, end))
 		{}
 
-		constexpr MemoryView(T* start, std::size_t length)
-			: beginElement(start)
-			, count(length)
-		{}
-
 		constexpr T& operator[](const std::size_t index) const
 		{
-			return *const_cast<T*>(beginElement + index);
+			return beginElement[index];
 		}
 
 		constexpr iterator begin() const
@@ -68,7 +112,7 @@ namespace sx
 		}
 
 	private:
-		const iterator beginElement;
+		iterator beginElement;
 		const std::size_t count;
 	};
 }

@@ -1,48 +1,50 @@
 #pragma once
-#include <cassert>
+
+#include <initializer_list>
+#include <type_traits>
 #include "MemoryView.hpp"
 
 namespace sx
 {
-	template<class T, std::size_t N>
-	class Storage
+	template<class T, std::size_t N, std::size_t Alignment>
+	class AlignedStorage
 	{
 	public:
-		constexpr Storage() = default;
-		Storage(Storage&) = delete;
-		Storage& operator=(Storage&) = delete;
+		using value_type = typename std::aligned_storage<sizeof(T), Alignment>::type;
+		
+		AlignedStorage() = default;
+		AlignedStorage(AlignedStorage&) = delete;
+		AlignedStorage& operator=(AlignedStorage&) = delete;
 
-		T * data()
-		{
-			return internalBuffer;
-		}
-
-	private:
-		T internalBuffer[N];
+		value_type storage[N];
 	};
-
-	template<class T, std::size_t N>
-	class Buffer 
-		: public Storage<T, N>
-		, public MemoryView<T>
+	
+	template<class T, std::size_t N, std::size_t Alignment = alignof(T)>
+	class Buffer
+		: public AlignedStorage<T,N,alignof(T)>
+		, public MemoryView<T, typename AlignedStorage<T, N, Alignment>::value_type>
 	{
 	public:
 		constexpr Buffer()
-		  : Storage<T,N>()
-		  , MemoryView<T>(this)
+		  : AlignedStorage<T, N, alignof(T)>()
+		  , MemoryView<T, AlignedStorage<T, N, Alignment>::value_type>(storage, N)
 		  {}
 		  
 		Buffer(Buffer&) = delete;
 		Buffer& operator=(Buffer&) = delete;
 
-		template<class T2, std::size_t N2>
-		constexpr Buffer(const T2 (&init)[N2])
+		constexpr Buffer(std::initializer_list<T> init)
+			: AlignedStorage<T, N, alignof(T)>()
+			, MemoryView<T, AlignedStorage<T, N, alignof(T)>::value_type>(storage, N)
 		{
-			static_assert(N2 <= N, "assignment does not fit buffer!");
+			assert(init.size() <= N && "size of initializer list too big.");
 
-			iterator storageit = this->begin();
-			for (int i= 0; i < N2; ++i)
-				*storageit++ = init[i];
+			iterator storageit = begin();
+			for (std::initializer_list<T>::iterator it = init.begin(); it != init.end(); ++it)
+			{
+				new (&*storageit) T(*it);
+				++storageit;
+			}
 		}
 	};
 }
