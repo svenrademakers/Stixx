@@ -1,5 +1,6 @@
 #pragma once
 #include <cassert>
+#include <initializer_list>
 #include "MemoryView.hpp"
 
 namespace sx
@@ -11,8 +12,9 @@ namespace sx
 		constexpr Storage() = default;
 		Storage(Storage&) = delete;
 		Storage& operator=(Storage&) = delete;
-
-		T * data()
+	
+	protected:
+		T* data()
 		{
 			return internalBuffer;
 		}
@@ -29,20 +31,22 @@ namespace sx
 	public:
 		constexpr Buffer()
 		  : Storage<T,N>()
-		  , MemoryView<T>(this)
+		  , MemoryView<T>(data(), N)
 		  {}
 		  
 		Buffer(Buffer&) = delete;
 		Buffer& operator=(Buffer&) = delete;
 
-		template<class T2, std::size_t N2>
-		constexpr Buffer(const T2 (&init)[N2])
+		constexpr Buffer(std::initializer_list<T> init)
+			: Storage<T, N>()
+			, MemoryView<T>(data(), N)
 		{
-			static_assert(N2 <= N, "assignment does not fit buffer!");
+			assert(init.size() <= N);
 
 			iterator storageit = this->begin();
-			for (int i= 0; i < N2; ++i)
-				*storageit++ = init[i];
+			
+			for (int i= 0; i < init.size(); ++i)
+				new (storageit++) T(*(init.begin() + i));
 		}
 	};
 }

@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
 #include "MemoryView.hpp"
-#include <vector>
+#include "Buffer.hpp"
 
 namespace sx
 {
 	TEST(MemoryRangeTest, sanity_check)
 	{
-		std::vector<uint32_t> storage = { 1,2,3 };
+		sx::Buffer<uint32_t, 3> storage = { 1,2,3 };
 		MemoryView<uint32_t> range(storage);
 
 		EXPECT_EQ(3, range.size());
@@ -20,7 +20,7 @@ namespace sx
 
 	TEST(MemoryRangeTest, MemoryRange2D)
 	{
-		std::vector<uint32_t> storage = { 1,2,3,4,5,10 };
+		sx::Buffer<uint32_t, 6> storage = { 1,2,3,4,5,10 };
 		MemoryView<uint32_t> range(storage);
 
 		EXPECT_EQ(6, range.size());

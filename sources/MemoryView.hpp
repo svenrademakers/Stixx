@@ -16,17 +16,6 @@ namespace sx
 		typedef typename T* iterator;
 		typedef typename const T* const_iterator;
 
-		template<typename T2, std::size_t N>
-		constexpr MemoryView(Storage<T2,N>* storage)
-			: beginElement(reinterpret_cast< T*>(storage->data()))
-			, count(N)
-		{}
-
-		MemoryView(std::vector<T>& vector)
-			: beginElement(vector.data())
-			, count(vector.size())
-		{}
-
 		constexpr MemoryView(const iterator begin, const iterator end)
 			: beginElement(begin)
 			, count(std::distance(begin, end))
