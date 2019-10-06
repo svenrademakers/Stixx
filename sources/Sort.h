@@ -1,5 +1,5 @@
 #pragma once
-#include <cstdlib>
+#include <functional>
 #include "MemoryView.hpp"
 
 template <class T, class Predicate>
@@ -25,13 +25,13 @@ inline void BubbleSort(const sx::MemoryView<T>& collection, const Predicate& pre
 }
 
 template <class T>
-void BubbleSort(const sx::MemoryView<T>& collection)
+void BubbleSort(const sx::MemoryView<T> collection)
 {
 	BubbleSort(collection, [](const T& first, const T& second) { return first > second; });
 }
 
 template <class T>
-void SelectionSort(const sx::MemoryView<T>& collection)
+void SelectionSort(const sx::MemoryView<T> collection)
 {
 	T min = 0;
 	for (int i=0; i<collection.size(); ++i)
@@ -45,3 +45,25 @@ void SelectionSort(const sx::MemoryView<T>& collection)
 		std::swap(collection[i], collection[min]);
 	}
 }
+
+template <class T>
+void InsertionSort(const sx::MemoryView<T> collection)
+{
+	if (collection.size() == 1)
+		return;
+
+	std::size_t firstUnsortedIndex = 1;
+
+	do
+	{
+		std::size_t index = firstUnsortedIndex;
+		while (index > 0)
+		{
+			if (collection[index] < collection[index - 1])
+				std::swap(collection[index], collection[index - 1]);
+			--index;
+		}
+	} while (++firstUnsortedIndex < collection.size());
+}
+
+
