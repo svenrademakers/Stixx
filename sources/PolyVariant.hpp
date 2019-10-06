@@ -23,16 +23,16 @@ namespace sx
 			new (std::addressof(storage)) typename Front<T...>::value_type();
 		}
 
-		template<typename T, typename...Args>
-		PolyVariant(T, Args&&... args)
+		template<typename T2, typename...Args>
+		PolyVariant(T2, Args&&... args)
 		{
-			Construct<T>(std::forward<Args>(args)...);
+			Construct<T2>(std::forward<Args>(args)...);
 		}
 
-		template<typename T, typename...Args>
-		T& emplace(Args&&... args)
+		template<typename T2, typename...Args>
+		T2& emplace(Args&&... args)
 		{
-			return Construct<T>(std::forward<Args>(args)...);
+			return Construct<T2>(std::forward<Args>(args)...);
 		}
 
 		Base* const Get()
@@ -48,10 +48,10 @@ namespace sx
 		}
 
 	private:
-		template<typename T, typename...Args>
-		T& Construct(Args&&... args)
+		template<typename T2, typename...Args>
+		T2& Construct(Args&&... args)
 		{
-			return *(new (std::addressof(storage)) T(std::forward<Args>(args)...));
+			return *(new (std::addressof(storage)) T2(std::forward<Args>(args)...));
 		}
 
 		typename std::aligned_union<Size, T...>::type storage;

@@ -9,11 +9,11 @@ namespace sx
 	class StridedIterator
 	{
 	public:
-		typedef typename uint32_t difference_type;
-		typedef typename T value_type;
-		typedef typename T& reference;
-		typedef typename T* pointer;
-		typedef typename std::input_iterator_tag iterator_category;
+		typedef uint32_t difference_type;
+		typedef T value_type;
+		typedef T& reference;
+		typedef T* pointer;
+		typedef std::input_iterator_tag iterator_category;
 		static constexpr uint32_t Stride = Stride_;
 
 	public:
@@ -67,13 +67,13 @@ namespace sx
 	{
 	public:
 		StridedIterator2D(const StridedIterator<T, Stride_> iterator, const uint32_t width)
-			: StridedIterator<T, Stride>(iterator)
+			: StridedIterator<T, Stride_>(iterator)
 			, width(width)
 		{}
 
 		void verticalIncrement()
 		{
-			ptr += (Stride_ * width);
+			this->ptr += (Stride_ * width);
 		}
 
 	private:

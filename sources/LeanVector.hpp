@@ -24,7 +24,7 @@ namespace sx
 	{
 	public:
 		constexpr StackStorage()
-			: Base(storage.data(), storage.data() + storage.size())
+			: Base(this->storage.data(), this->storage.data() + this->storage.size())
 		{}
 	};
 

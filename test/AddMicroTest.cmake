@@ -32,6 +32,10 @@ macro(AddBenchmark target)
 		PRIVATE
 			$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
 	
-	target_link_libraries(${target}_Benchmark ${target} benchmark_main Shlwapi )
+	target_link_libraries(${target}_Benchmark ${target} benchmark_main )
+	if(WIN32)
+			target_link_libraries(${target}_Benchmark Shlwapi )
+	endif()
+
 	install(TARGETS ${target}_Benchmark DESTINATION bin)	
 endmacro()

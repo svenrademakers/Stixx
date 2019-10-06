@@ -31,7 +31,7 @@ namespace sx
 	public:
 		constexpr Buffer()
 		  : Storage<T,N>()
-		  , MemoryView<T>(data(), N)
+		  , MemoryView<T>(this->data(), N)
 		  {}
 		  
 		Buffer(Buffer&) = delete;
@@ -39,12 +39,11 @@ namespace sx
 
 		constexpr Buffer(std::initializer_list<T> init)
 			: Storage<T, N>()
-			, MemoryView<T>(data(), N)
+			, MemoryView<T>(this->data(), N)
 		{
 			assert(init.size() <= N);
 
-			iterator storageit = this->begin();
-			
+			auto storageit = this->begin();
 			for (int i= 0; i < init.size(); ++i)
 				new (storageit++) T(*(init.begin() + i));
 		}

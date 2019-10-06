@@ -33,16 +33,16 @@ void BubbleSort(const sx::MemoryView<T>& collection)
 	BubbleSort(collection, [](const T& first, const T& second) { return first > second; });
 }
 
-template <class T, std::size_t N>
-void SelectionSort(T(&collection)[N])
+template <class T>
+void SelectionSort(const sx::MemoryView<T>& collection)
 {
-	for (int i = 0; i < N; ++i)
-	{
-		std::size_t minSize;
-		for (int ii = 0; ii < N; ++ii)
-		{
+	// for (int i = 0; i < N; ++i)
+	// {
+	// 	std::size_t minSize;
+	// 	for (int ii = 0; ii < N; ++ii)
+	// 	{
 			
-		}
-	}
+	// 	}
+	// }
 
 }

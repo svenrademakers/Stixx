@@ -13,8 +13,8 @@ namespace sx
 	class MemoryView
 	{
 	public:
-		typedef typename T* iterator;
-		typedef typename const T* const_iterator;
+		typedef T* iterator;
+		typedef const T* const_iterator;
 
 		constexpr MemoryView(const iterator begin, const iterator end)
 			: beginElement(begin)
