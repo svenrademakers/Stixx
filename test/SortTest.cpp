@@ -13,7 +13,9 @@ void ExeSortFunction(const sx::MemoryView<T>& view, int index)
 			break;
 		case 1:
 			SelectionSort(view);
-			default:
+			break;
+
+		default:
 			std::cout << "sort function index unknown";
 			break;
 	}
@@ -61,4 +63,4 @@ TEST_P(SortingTests, sort_with_negative_numbers)
 
 INSTANTIATE_TEST_CASE_P(SortingTestSuite, 
 	SortingTests, 
-	::testing::Values(0));
+	::testing::Values(0,1));

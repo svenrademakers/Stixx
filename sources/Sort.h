@@ -15,9 +15,7 @@ inline void BubbleSort(const sx::MemoryView<T>& collection, const Predicate& pre
 		{
 			if (ii + 1 < collection.size() && predicate(collection[ii], collection[ii + 1]))
 			{
-				temp = collection[ii];
-				collection[ii] = collection[ii + 1];
-				collection[ii + 1] = temp;
+				std::swap(collection[ii], collection[ii+1]);
 				sorted = false;
 			}
 		}
@@ -36,13 +34,15 @@ void BubbleSort(const sx::MemoryView<T>& collection)
 template <class T>
 void SelectionSort(const sx::MemoryView<T>& collection)
 {
-	// for (int i = 0; i < N; ++i)
-	// {
-	// 	std::size_t minSize;
-	// 	for (int ii = 0; ii < N; ++ii)
-	// 	{
-			
-	// 	}
-	// }
-
+	T min = 0;
+	for (int i=0; i<collection.size(); ++i)
+	{
+		min = i;
+		for (int ii = i; ii < collection.size(); ++ii)
+		{
+			if(collection[ii] < collection[min])
+				min = ii;
+		}
+		std::swap(collection[i], collection[min]);
+	}
 }
