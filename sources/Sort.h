@@ -5,7 +5,6 @@
 template <class T, class Predicate>
 inline void BubbleSort(const sx::MemoryView<T>& collection, const Predicate& predicate)
 {
-	T temp;
 	bool sorted = false;
 
 	for (int i = 0; i < collection.size(); ++i)

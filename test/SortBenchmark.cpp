@@ -20,6 +20,15 @@ static void BM_BubbleSort(benchmark::State& state)
 		BubbleSort(range);
 }
 
+static void BM_SelectionSort(benchmark::State& state)
+{
+	std::vector<char> TestSet = TestData;
+	sx::MemoryView<char> range(TestSet.data(), state.range(0));
+	for (auto _ : state)
+		SelectionSort(range);
+}
+
 //BENCHMARK(BM_BubbleSort)->DenseRange(6400, 30464, 128);
-BENCHMARK(BM_BubbleSort)->RangeMultiplier(2)->Range(0, 1<<16);
+BENCHMARK(BM_BubbleSort)->RangeMultiplier(2)->Range(0, 128);
+BENCHMARK(BM_SelectionSort)->RangeMultiplier(2)->Range(0, 128);
 
