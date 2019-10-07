@@ -1,6 +1,6 @@
 #pragma once
-#include <cassert>
 #include <initializer_list>
+#include <type_traits>
 #include "MemoryView.hpp"
 
 namespace sx
@@ -9,37 +9,38 @@ namespace sx
 	class Storage
 	{
 	public:
+		using value_type = std::decay<T>::type;
 		constexpr Storage() = default;
 		Storage(Storage&) = delete;
 		Storage& operator=(Storage&) = delete;
 	
 	protected:
-		T* data()
+		value_type* data()
 		{
 			return internalBuffer;
 		}
 
 	private:
-		T internalBuffer[N];
+		value_type internalBuffer[N];
 	};
 
 	template<class T, std::size_t N>
 	class Buffer 
 		: public Storage<T, N>
-		, public MemoryView<T>
+		, public MemoryView<Storage<T, N>::value_type>
 	{
-	public:
-		constexpr Buffer()
-		  : Storage<T,N>()
-		  , MemoryView<T>(this->data(), N)
-		  {}
-		  
+	public:			  
 		Buffer(Buffer&) = delete;
 		Buffer& operator=(Buffer&) = delete;
+		
+		constexpr Buffer()
+		  : Storage<T,N>()
+		  , MemoryView<Storage<T, N>::value_type>(this->data(), N)
+		  {}
 
 		constexpr Buffer(std::initializer_list<T> init)
 			: Storage<T, N>()
-			, MemoryView<T>(this->data(), N)
+			, MemoryView<Storage<T, N>::value_type>(this->data(), N)
 		{
 			assert(init.size() <= N);
 
