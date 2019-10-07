@@ -25,7 +25,7 @@ namespace sx
 
 		constexpr T& operator[](const std::size_t index) const
 		{
-			return *const_cast<T*>(beginElement + index);
+			return *(beginElement + index);
 		}
 
 		constexpr iterator begin() const
