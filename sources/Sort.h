@@ -47,19 +47,20 @@ void SelectionSort(const sx::MemoryView<T> collection)
 }
 
 template <class T>
-void InsertionSort(const sx::MemoryView<T> collection)
+void InsertionSort(const sx::MemoryView<T> collection, T::* member = &T)
 {
 	if (collection.size() == 1)
 		return;
 
 	std::size_t firstUnsortedIndex = 1;
-
+	auto f = std::bind(member, std::placeholders::_1);
+	
 	do
 	{
 		std::size_t index = firstUnsortedIndex;
 		while (index > 0)
 		{
-			if (collection[index] < collection[index - 1])
+			if (f(collection[index]) < f(collection[index - 1]))
 				std::swap(collection[index], collection[index - 1]);
 			--index;
 		}
