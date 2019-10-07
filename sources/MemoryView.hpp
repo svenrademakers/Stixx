@@ -6,9 +6,6 @@
 
 namespace sx
 {
-	template<class T, std::size_t N>
-	class Storage;
-
 	template<class T>
 	class MemoryView
 	{
