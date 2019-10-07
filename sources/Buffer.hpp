@@ -9,7 +9,7 @@ namespace sx
 	class Storage
 	{
 	public:
-		using value_type = std::decay<T>::type;
+		using value_type = typename std::decay<T>::type;
 		constexpr Storage() = default;
 		Storage(Storage&) = delete;
 		Storage& operator=(Storage&) = delete;

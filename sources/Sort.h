@@ -1,5 +1,7 @@
 #pragma once
 #include <functional>
+#include <type_traits>
+#include <cassert>
 #include "MemoryView.hpp"
 
 template <class T, class Predicate>
@@ -47,14 +49,63 @@ void SelectionSort(const sx::MemoryView<T> collection)
 }
 
 template <class T>
-void InsertionSort(const sx::MemoryView<T> collection, T::* member = &T)
+void InsertionSort(const sx::MemoryView<T> collection)
 {
 	if (collection.size() == 1)
 		return;
 
 	std::size_t firstUnsortedIndex = 1;
-	auto f = std::bind(member, std::placeholders::_1);
 	
+	do
+	{
+		std::size_t index = firstUnsortedIndex;
+		while (index > 0)
+		{
+			if (collection[index] < collection[index - 1])
+				std::swap(collection[index], collection[index - 1]);
+			--index;
+		}
+	} while (++firstUnsortedIndex < collection.size());
+}
+
+template<class T, class Bind>
+struct BinAdapter
+{
+	static_assert(std::is_member_pointer<Bind>::value, "only memberpointers allowed.");
+
+	constexpr BinAdapter(Bind abind)
+		: bind(abind)
+	{}
+
+	auto operator()(T& val)
+	{
+		return std::bind(bind, std::placeholders::_1)(val);
+	}
+
+private:
+	Bind bind;
+};
+
+template<class T>
+struct BinAdapter<T, void*>
+{
+	constexpr BinAdapter(void *) {}
+
+	T& operator()(T& val)
+	{
+		return val;
+	}
+};
+
+template<class T, class Bind = void*>
+void SvenSort(const sx::MemoryView<T> collection, Bind bind = nullptr)
+{
+	if (collection.size() == 1)
+		return;
+
+	std::size_t firstUnsortedIndex = 1;
+	BinAdapter<T,Bind> f(bind);
+
 	do
 	{
 		std::size_t index = firstUnsortedIndex;
@@ -66,5 +117,4 @@ void InsertionSort(const sx::MemoryView<T> collection, T::* member = &T)
 		}
 	} while (++firstUnsortedIndex < collection.size());
 }
-
 
