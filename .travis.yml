@@ -29,5 +29,5 @@ jobs:
       name: "Build"
       script: mkdir -p build
      - cd build
-     - cmake ${CMAKE_OPTIONS} -DSTIXX_TESTS=OFF .. 
+     - cmake  ${CMAKE_OPTIONS} -DSTIXX_TESTS=OFF .. 
      - make
