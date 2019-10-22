@@ -68,53 +68,34 @@ void InsertionSort(const sx::MemoryView<T> collection)
 	} while (++firstUnsortedIndex < collection.size());
 }
 
-template<class T, class Bind>
-struct BinAdapter
+namespace
 {
-	static_assert(std::is_member_pointer<Bind>::value, "only memberpointers allowed.");
-
-	constexpr BinAdapter(Bind abind)
-		: bind(abind)
-	{}
-
-	auto operator()(T& val)
+	template<class T>
+	void RecursiveMerge(const T* begin, const T* end)
 	{
-		return std::bind(bind, std::placeholders::_1)(val);
-	}
-
-private:
-	Bind bind;
-};
-
-template<class T>
-struct BinAdapter<T, void*>
-{
-	constexpr BinAdapter(void *) {}
-
-	T& operator()(T& val)
-	{
-		return val;
-	}
-};
-
-template<class T, class Bind = void*>
-void SvenSort(const sx::MemoryView<T> collection, Bind bind = nullptr)
-{
-	if (collection.size() == 1)
-		return;
-
-	std::size_t firstUnsortedIndex = 1;
-	BinAdapter<T,Bind> f(bind);
-
-	do
-	{
-		std::size_t index = firstUnsortedIndex;
-		while (index > 0)
+		std::size_t size = std::distance(begin, end);
+		if (size == 1)
+			return;
+		else if (size == 2)
 		{
-			if (f(collection[index]) < f(collection[index - 1]))
-				std::swap(collection[index], collection[index - 1]);
-			--index;
+			if(*begin > *end)
+				std::swap(*begin, *end);
+
 		}
-	} while (++firstUnsortedIndex < collection.size());
+		else
+		{
+			RecursiveMerge(begin, begin + (size/2));
+			RecursiveMerge(begin + (size/2), end);
+			
+			SelectionSort<T>({begin, end});
+		}
+	}
 }
+
+template <class T>
+void MergeSort(const sx::MemoryView<T> collection)
+{
+	RecursiveMerge(collection.begin(), collection.end());
+}
+
 
