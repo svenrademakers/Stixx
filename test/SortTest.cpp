@@ -3,7 +3,7 @@
 #include "Buffer.hpp"
 #include <functional>
 
-template<typename T>
+template<class T>
 void ExeSortFunction(const sx::MemoryView<T>& view, int index)
 {
 	switch(index)

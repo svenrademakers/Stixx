@@ -71,28 +71,51 @@ void InsertionSort(const sx::MemoryView<T> collection)
 namespace
 {
 	template<class T>
-	void RecursiveMerge(const T* begin, const T* end)
+	void RecursiveMerge(const sx::MemoryView<T> collection, const sx::MemoryView<T> result)
 	{
-		
+		std::size_t size = collection.size();
+		if (size == 1)
+			return;
+		else if (size == 2)
+		{
+			if (*collection.begin() > *collection.last())
+				std::swap(*collection.begin(), *collection.last());
+		}
+		else
+		{
+			const sx::MemoryView<T>& left{ collection.begin(), collection.begin() + (size / 2) };
+			const sx::MemoryView<T>& right{ collection.begin() + (size / 2), collection.end() };
+			RecursiveMerge<T>(left, {result.begin(), result.begin() + (size/2)});
+			RecursiveMerge<T>(right, { result.begin() + (size / 2), result.begin() });
+
+			T* l = left.begin();
+			T* r = right.begin();
+			T* n = result.begin();
+			for (int i = 0; i < result.size(); i)
+			{
+				if (r == right.end() || *l < *r)
+				{
+					*n = *l;
+					++l;
+				}
+				else 
+				{
+					*n = *r;
+					++r;
+				}
+				++n;
+			}
+		}
 	}
 }
 
 template <class T>
-void MergeSort(const sx::MemoryView<T> collection)
+void MergeSort(const sx::MemoryView<T>& collection)
 {
-	if (collection.size() == 1)
-		return;
-	else if (collection.size() == 2)
-	{
-		if(*collection.begin() > *collection.last())
-			std::swap(*collection.begin(), *collection.last());
-	}
-	else
-	{
-		RecursiveMerge({collection.begin(), collection.begin() + (size/2)});
-		RecursiveMerge({collection.begin() + (size/2), collection.end()});
-		SelectionSort<T>(collection);
-	}
+	std::vector<T> resultBuffer;
+	resultBuffer.reserve(collection.size());
+
+	const sx::MemoryView<T> result(&*resultBuffer.begin(), resultBuffer.size());
+	RecursiveMerge<T>(collection, result);
+	memcpy(collection.begin(), &*resultBuffer.begin(), collection.size());
 }
-
-
