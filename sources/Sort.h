@@ -73,29 +73,26 @@ namespace
 	template<class T>
 	void RecursiveMerge(const T* begin, const T* end)
 	{
-		std::size_t size = std::distance(begin, end);
-		if (size == 1)
-			return;
-		else if (size == 2)
-		{
-			if(*begin > *end)
-				std::swap(*begin, *end);
-
-		}
-		else
-		{
-			RecursiveMerge(begin, begin + (size/2));
-			RecursiveMerge(begin + (size/2), end);
-			
-			SelectionSort<T>({begin, end});
-		}
+		
 	}
 }
 
 template <class T>
 void MergeSort(const sx::MemoryView<T> collection)
 {
-	RecursiveMerge(collection.begin(), collection.end());
+	if (collection.size() == 1)
+		return;
+	else if (collection.size() == 2)
+	{
+		if(*collection.begin() > *collection.last())
+			std::swap(*collection.begin(), *collection.last());
+	}
+	else
+	{
+		RecursiveMerge({collection.begin(), collection.begin() + (size/2)});
+		RecursiveMerge({collection.begin() + (size/2), collection.end()});
+		SelectionSort<T>(collection);
+	}
 }
 
 

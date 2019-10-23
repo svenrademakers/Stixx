@@ -47,6 +47,13 @@ namespace sx
 		{
 			return beginElement + count;
 		}
+		
+		constexpr iterator last() const
+		{
+			assert(count > 0);
+			return beginElement + count -1;
+		}
+
 
 		constexpr std::size_t size() const
 		{
