@@ -18,7 +18,7 @@ void ExeSortFunction(const sx::MemoryView<T>& view, int index)
 			InsertionSort(view);
 			break;
 		case 3:
-			MergeSort(view);
+			//MergeSort(view);
 		default:
 			std::cout << "sort function index unknown";
 			break;
@@ -92,4 +92,4 @@ TEST_P(SortingTests, sort_with_negative_numbers)
 
 INSTANTIATE_TEST_CASE_P(SortingTestSuite, 
 	SortingTests, 
-	::testing::Values(0,1,2,3));
+	::testing::Values(0,1,2));

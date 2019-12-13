@@ -29,7 +29,7 @@ namespace sx
 		: public Storage<T, N>
 		, public MemoryView<typename Storage<T, N>::value_type>
 	{
-	public:			  
+	public:
 		Buffer(Buffer&) = delete;
 		Buffer& operator=(Buffer&) = delete;
 		

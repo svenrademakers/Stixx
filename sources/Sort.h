@@ -70,52 +70,101 @@ void InsertionSort(const sx::MemoryView<T> collection)
 
 namespace
 {
+	static bool toggle = true;
+
 	template<class T>
-	void RecursiveMerge(const sx::MemoryView<T> collection, const sx::MemoryView<T> result)
+	void ToggleBuffers(sx::MemoryView<T>& a,
+		sx::MemoryView<T>& b,
+		sx::MemoryView<T>*& from,
+		sx::MemoryView<T>*& to)
 	{
-		std::size_t size = collection.size();
-		if (size == 1)
-			return;
-		else if (size == 2)
+
+		if (toggle)
 		{
-			if (*collection.begin() > *collection.last())
-				std::swap(*collection.begin(), *collection.last());
+			from = &a;
+			to = &b;
 		}
 		else
 		{
-			const sx::MemoryView<T>& left{ collection.begin(), collection.begin() + (size / 2) };
-			const sx::MemoryView<T>& right{ collection.begin() + (size / 2), collection.end() };
-			RecursiveMerge<T>(left, {result.begin(), result.begin() + (size/2)});
-			RecursiveMerge<T>(right, { result.begin() + (size / 2), result.begin() });
+			from = &b;
+			to = &a;
+		}
 
-			T* l = left.begin();
-			T* r = right.begin();
-			T* n = result.begin();
-			for (int i = 0; i < result.size(); i)
+		toggle = !toggle;
+	}
+
+	template<class T>
+	void WriteBack(sx::MemoryView<T>& to,
+		sx::MemoryView<T>& from)
+	{
+		if (!toggle)
+			std::memcpy(to.begin(), from.begin(), from.size()* sizeof(T));
+	}
+
+	template<class T>
+	void Merge(T* left, T* right, const int size, T* result)
+	{
+		int i = 0;
+		T* leftIt = left;
+		T* rightIt = right;
+
+		while (leftIt != left + size && rightIt != right + size)
+		{
+			if (*leftIt > *rightIt)
 			{
-				if (r == right.end() || *l < *r)
-				{
-					*n = *l;
-					++l;
-				}
-				else 
-				{
-					*n = *r;
-					++r;
-				}
-				++n;
+				result[i] = *rightIt;
+				++rightIt;
 			}
+			else
+			{
+				result[i] = *leftIt;
+				++leftIt;
+			}
+			++i;
+		}
+
+		while (leftIt != left + size)
+		{
+			result[i] = *leftIt;
+			++i;
+			++leftIt;
+		}
+		
+		while (rightIt != right + size)
+		{
+			result[i] = *rightIt;
+			++i;
+			++rightIt;
 		}
 	}
 }
 
 template <class T>
-void MergeSort(const sx::MemoryView<T>& collection)
+void MergeSort(sx::MemoryView<T> collection)
 {
-	std::vector<T> resultBuffer;
-	resultBuffer.reserve(collection.size());
+	if (collection.size() < 2)
+		return;
 
-	const sx::MemoryView<T> result(&*resultBuffer.begin(), resultBuffer.size());
-	RecursiveMerge<T>(collection, result);
-	memcpy(collection.begin(), &*resultBuffer.begin(), collection.size());
+	std::vector<T> resultBuffer;
+	resultBuffer.resize(collection.size());
+	sx::MemoryView<T> extraBuffer(resultBuffer.data(), resultBuffer.size());
+
+	int size = 1;
+	sx::MemoryView<T>* from = nullptr;
+	sx::MemoryView<T>* to = nullptr;
+
+	for (int n = 0; n < collection.size() / 2; ++n)
+	{
+		ToggleBuffers(collection, extraBuffer, from, to);
+
+		int write = 0;
+		for (int i = 0; i < collection.size() / (size * 2); ++i)
+		{
+			Merge(from->begin()+ write, from->begin() + write + size, size, to->begin() + write);
+			write += size*2;
+		}
+		size += size;
+	}
+
+	WriteBack(collection, extraBuffer);
 }
